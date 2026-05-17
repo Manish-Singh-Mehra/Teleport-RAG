@@ -1,0 +1,102 @@
+[
+  {
+    "id": "doc_001",
+    "title": "Horizontal Scaling",
+    "content": "Horizontal scaling (scale-out) distributes workload across multiple commodity servers. An auto-scaler monitors CPU utilization and provisions additional instances when utilization exceeds a configurable threshold—typically 70–80%—during peak load periods. Elastic scaling policies can also react to custom metrics such as queue depth or request latency, enabling fine-grained capacity management without manual intervention.",
+    "metadata": {
+      "source": "system_design_primer",
+      "tags": ["scaling", "infrastructure", "auto-scaling"],
+      "page": 1
+    }
+  },
+  {
+    "id": "doc_002",
+    "title": "Redis Caching Layer",
+    "content": "A Redis Cluster configured with LRU (Least Recently Used) eviction acts as a distributed cache sitting between the application tier and the primary database. By serving repeated read requests directly from RAM, the cache dramatically reduces database I/O during traffic spikes. TTL-based expiry and write-through invalidation keep cached data consistent with the source of truth while maintaining sub-millisecond read latency at scale.",
+    "metadata": {
+      "source": "system_design_primer",
+      "tags": ["caching", "redis", "database"],
+      "page": 2
+    }
+  },
+  {
+    "id": "doc_003",
+    "title": "Circuit Breaker Pattern",
+    "content": "Resilience4j implements the circuit-breaker pattern to prevent cascade failures in microservice architectures. The breaker transitions from CLOSED to OPEN when the error rate in a configurable sliding window exceeds 50%. While OPEN, requests are short-circuited to a fallback immediately, protecting downstream services. After a wait duration the breaker enters HALF_OPEN, allowing a limited number of probe requests to determine whether the downstream service has recovered.",
+    "metadata": {
+      "source": "system_design_primer",
+      "tags": ["resilience", "circuit-breaker", "microservices"],
+      "page": 3
+    }
+  },
+  {
+    "id": "doc_004",
+    "title": "Kafka Event Streaming",
+    "content": "Apache Kafka organises events into topics partitioned for parallel consumption. Consumer groups assign each partition to exactly one consumer within the group, enabling horizontal read scalability. Kafka's idempotent producers and transactional APIs guarantee exactly-once semantics end-to-end, preventing both message loss and duplication—critical requirements for financial and audit-sensitive event pipelines.",
+    "metadata": {
+      "source": "system_design_primer",
+      "tags": ["messaging", "kafka", "streaming", "exactly-once"],
+      "page": 4
+    }
+  },
+  {
+    "id": "doc_005",
+    "title": "Disaster Recovery",
+    "content": "A geo-redundant active-passive failover architecture maintains a hot standby in a secondary region. Change Data Capture (CDC) replication streams row-level mutations from the primary database to the standby in near-real-time, achieving a Recovery Point Objective (RPO) of 30 seconds. Automated health-check probes trigger DNS-based failover, meeting a Recovery Time Objective (RTO) under two minutes for most failure scenarios.",
+    "metadata": {
+      "source": "system_design_primer",
+      "tags": ["disaster-recovery", "failover", "replication", "RPO"],
+      "page": 5
+    }
+  },
+  {
+    "id": "doc_006",
+    "title": "API Gateway and Rate Limiting",
+    "content": "An API Gateway serves as the single entry point for all client requests, performing authentication, TLS termination, and request routing. Token-bucket rate limiting enforces per-client quotas—for example, 1 000 requests per minute—to protect backend services from abuse and to ensure fair resource allocation. Burst allowances let clients absorb short traffic spikes without triggering hard rejections.",
+    "metadata": {
+      "source": "system_design_primer",
+      "tags": ["api-gateway", "rate-limiting", "security"],
+      "page": 6
+    }
+  },
+  {
+    "id": "doc_007",
+    "title": "Consistent Hashing",
+    "content": "Consistent hashing maps both nodes and data keys onto a virtual ring, minimising key redistribution when nodes are added or removed. With virtual nodes (vnodes), each physical server owns multiple segments of the ring, ensuring a statistically even load distribution even with heterogeneous hardware. This property makes consistent hashing the preferred sharding algorithm for distributed caches and databases such as Amazon DynamoDB and Apache Cassandra.",
+    "metadata": {
+      "source": "system_design_primer",
+      "tags": ["sharding", "consistent-hashing", "distributed-systems"],
+      "page": 7
+    }
+  },
+  {
+    "id": "doc_008",
+    "title": "CQRS and Event Sourcing",
+    "content": "Command Query Responsibility Segregation (CQRS) separates write operations (commands) from read operations (queries) into distinct models, allowing each to be optimised independently. When combined with Event Sourcing—where state changes are persisted as an immutable sequence of events—the system gains a full audit log and the ability to replay events to rebuild any past state. This architecture suits domains with complex business rules and strict compliance requirements.",
+    "metadata": {
+      "source": "system_design_primer",
+      "tags": ["cqrs", "event-sourcing", "architecture"],
+      "page": 8
+    }
+  },
+  {
+    "id": "doc_009",
+    "title": "Load Balancing Algorithms",
+    "content": "Load balancers distribute incoming traffic across backend server pools using algorithms such as Round Robin, Least Connections, and IP Hash. Round Robin cycles through servers sequentially; Least Connections routes to the server with the fewest active connections—preferable for variable-length requests. Layer 7 load balancers inspect HTTP headers and can apply content-based routing, directing API and static-asset requests to specialised backend clusters.",
+    "metadata": {
+      "source": "system_design_primer",
+      "tags": ["load-balancing", "algorithms", "network"],
+      "page": 9
+    }
+  },
+  {
+    "id": "doc_010",
+    "title": "Distributed Tracing with OpenTelemetry",
+    "content": "OpenTelemetry provides a vendor-neutral SDK for capturing distributed traces, metrics, and logs across polyglot microservice environments. A trace context is propagated through HTTP headers (W3C TraceContext) and message broker metadata, linking spans from an originating client request through every downstream service call. Collected telemetry is exported to backends such as Jaeger or Google Cloud Trace, enabling latency profiling and root-cause analysis of production incidents.",
+    "metadata": {
+      "source": "system_design_primer",
+      "tags": ["observability", "tracing", "opentelemetry"],
+      "page": 10
+    }
+  }
+]
